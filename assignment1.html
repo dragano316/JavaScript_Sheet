@@ -1,0 +1,111 @@
+<!-- Write a program that shows a form on web browser, with fields email, password, sex (drop down with option of male, female, other), 
+Role ( Radio button with option of Admin and User), Permissions (Checkbox with option Perm1, Perm2, Perm3, Perm4), Submit button.
+
+On clicking Submit button, following validation should take place 
+1. All fields should be filled.
+2. Email should be valid
+3. password should be min 6 character with MIX of Upercase, lowercase, digits
+4. Atleast 2 permissions should be ticked.
+
+If all validation pass, the form and ssubmit button should disapper and all the filled in details in the form should 
+appear with a Confirm Button. -->
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<body>
+
+<form id="myForm" method="post">
+    <label for="email">Email:</label><br>
+    <input id="email" type="text" name="email" required><br>
+    <label for="pass">Password:</label><br>
+    <input type="password" id="pass" name="pass"required><br>
+    <label for="sex">Sex:</label><br>
+    <select id="sex" name="cars" required><br>
+        <option value="male">male</option>
+        <option value="female">female</option>
+        <option value="other">other</option>
+    </select>
+    <p>Please select your role:</p>
+    <input type="radio" id="admin" name="role" value="admin" required>
+    <label for="admin">Admin</label><br>
+    <input type="radio" id="user" name="role" value="user">
+    <label for="user">User</label><br>
+    <input type="checkbox" id="permission1" name="per" value="Permission1">
+    <label for="permission1"> Permission1 </label><br>
+    <input type="checkbox" id="permission2" name="per" value="Permission2">
+    <label for="permission2"> Permission2 </label><br>
+    <input type="checkbox" id="permission3" name="per" value="Permission3">
+    <label for="permission3"> Permission3 </label><br>
+    <input type="checkbox" id="permission4" name="per" value="Permission4">
+    <label for="permission4"> Permission4 </label><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+<script>
+    function validateForm() {
+
+        var email = document.forms["myForm"]["email"]; 
+        var password = document.forms["myForm"]["pass"]; 
+        var permissions = document.forms["myForm"]["per"];
+        var role = document.forms["myForm"]["role"];
+        var sex = document.forms["myForm"]["sex"]; 
+        var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        email.style.borderColor = "";
+        password.style.borderColor = "";
+
+        if(!email.value.match(mailformat)){
+            // email.focus();
+            email.style.borderColor = "red";
+            alert("Please Provide valid email!!");
+            return false;
+        }
+        if(password.value.length<6 || !password.value.match(/[a-z]/) || !password.value.match(/[A-Z]/) || !password.value.match(/[0-9]/)){
+            // password.focus();
+            password.style.borderColor = "red";
+            alert("Password should be of length 6 and contain uppercase,lowercase and numbers only!!");
+            return false;
+        }
+
+        let count=0;
+        for(let i=0;i<permissions.length;i++){
+            if(permissions[i].checked){
+                count++;
+            }
+        }
+        if(count<2){
+            alert("Please select atleast two permissions");
+            return false;
+        }
+        document.getElementById("myForm").style.display="none";
+        confirm(`
+                Email:${email.value}
+                Password:${password.value}
+                Role:${role.value}
+                Sex:${sex.value}
+            `);
+        return true; 
+    }
+    
+    function formSubmit(e){
+        e.preventDefault();
+
+        const valid=validateForm();
+
+        if(valid){
+            console.log("submitted");
+        }
+        else{
+            console.log("form cannot be submitted");
+        }
+    }
+    
+    document.getElementById('myForm').addEventListener('submit',formSubmit);
+    </script>
+
+    
+</html>
